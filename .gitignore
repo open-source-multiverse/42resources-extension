@@ -1,0 +1,90 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+bower_components/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build output directories
+build/
+out/
+release/
+
+# Browser extension specific
+*.crx
+*.pem
+*.zip
+
+# Temporary files
+.tmp/
+.temp/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Backup files
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+
+# Miscellaneous
+.grunt
+.lock-wscript
+.npm
+.eslintcache
+.node_repl_history
+
+# Frontend build caches
+.next
+.nuxt
+.cache
+.docusaurus
+
+# Typescript
+*.tsbuildinfo
+
+# Package managers
+pnpm-lock.yaml
+yarn.lock
+
+# Test coverage
+coverage/
+.nyc_output/
+# IDE
+.idea/*

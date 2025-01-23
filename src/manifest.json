@@ -1,0 +1,48 @@
+{
+    "manifest_version": 3,
+    "name": "42Resources",
+    "description": "2resources is a simple extension provide resources for project like [blogs, videos, testers]",
+    "version": "1.0",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{ddf4e0df-7e58-48d1-9658-31bbb2e4d981}"
+        }
+    },
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+      },
+    "content_scripts": [
+        {
+            "js": ["scripts/content.js"],
+            "matches": [
+                "https://projects.intra.42.fr/*/*",
+                "https://projects.intra.42.fr/projects/*"
+            ],
+            "css": ["css/styles.css"],
+            "run_at": "document_start"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "html/panel.html"
+            ],
+            "matches": ["https://projects.intra.42.fr/*"]
+        }
+    ],
+    "host_permissions": [
+    	"https://projects.intra.42.fr/*"
+    ]
+}

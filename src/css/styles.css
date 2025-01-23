@@ -1,0 +1,133 @@
+:root {
+    --primary-color: #00babc; /*here*/
+    --secondary-color: #01263a;
+    --text-color: #333;
+    --background-color: #f2f2f2;
+    --panel-background: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --hover-color: #e6f7f7;
+}
+
+#dimmed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(1, 38, 58, 0.5);
+    z-index: 9998;
+    backdrop-filter: blur(5px);
+}
+
+#panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: min(1000px,100%);
+    max-height: 80%;
+    overflow-y: auto;
+    background-color: var(--panel-background);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    z-index: 9999;
+}
+
+#panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+#panel::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+#panel::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+.btn {
+    margin: 5px;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+#content {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+.icon
+{
+width:  24px;
+height: 24px;
+margin: 2px 20px 2px 4px;
+}
+
+.resource-container
+{
+
+display: flex;
+justify-content: start;
+justify-items: center;
+align-items: center;
+margin: 5px 5px;
+background-color: #307759;
+color: #fff !important;
+font-weight: 700;
+border-radius: 5px;
+}
+
+.link 
+{
+text-decoration: none;
+color: #fff !important;
+
+}
+
+.title-divider
+{
+text-align: center;
+
+--b: 6px;   /* control the border thickness */
+--w: 80px;  /* control the width of the line*/
+--g: 15px;  /* control the gap */
+
+/* --theme-color-light: #00ecef; */
+--c: #295F6B;
+
+width: fit-content;
+padding: 0 1em;
+line-height: 1.6em;
+color: #fff;
+background: 
+conic-gradient(from   45deg at left ,var(--c) 25%,#0000 0) 0,
+conic-gradient(from -135deg at right,var(--c) 25%,#0000 0) 100%;
+background-size: 51% 100%;
+background-repeat: no-repeat;
+border-image: 
+ linear-gradient(
+   #0000      calc(50% - var(--b)/2),
+   var(--c) 0 calc(50% + var(--b)/2),
+   #0000    0) 
+1/0 var(--w)/calc(var(--w) + var(--g));
+margin-inline: auto;
+
+}
+
+.note
+{
+
+    background-color: #01263a;
+    min-height: 30px;
+    border: 3px red solid;
+}
+
+.link
+{
+    color: #fff !important;
+}
