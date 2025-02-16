@@ -4,9 +4,7 @@ const PAGE_TYPE = { mine: 0, visitor: 1 }
  this class is Provider all Resources from backend 
  */
 class ResourcesProvider{
-    cache = {}     
-    injectedHtml =`<div id="dimmed-background"></div><div id="panel"><div id="content"></div></div>`;
-    
+    cache = {}         
     constructor()
     {
         this.backendUrl = 'https://cdn-42resources.netlify.app/';
@@ -14,53 +12,51 @@ class ResourcesProvider{
         this.JSON = "text"
     }
 
-    get(path, type, callback)
+   async get(path, type)
     {
         // check if [path] is  in cache
-        if(this.cache[path])
-        {
-                return callback(this.cache[path])
-        } 
+        if(this.cache[path]) return this.cache[path];
 
         const url = `${this.backendUrl}${path}`
-        fetch(url)
-            .then(response => {
-
-                if (!response.ok)
-                {
-                    return  type === this.JSON ? {} :  "Not Found ❌";
-
-                }
-                
-                if (type === this.TEXT)
-                {
-                    return response.text();
-                }
-                else{
-                    return response.json();
-                }
-            })
-            .then(data => {
-                this.cache[path] = data // save data as cache  
-                callback(data);
-            })
-            .catch(error => console.error('Error loading HTML:', error, 'from URL:', url));
-
-   
-    }
-
-    loadHTML(callback)
-{
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = this.injectedHtml;
-                callback(tempDiv);
+        const response = await  fetch(url);
           
+                if (!response.ok) return  type === this.JSON ? {} :  "Not Found ❌";
+
+                if (type === this.TEXT)
+                    return await response.text();
+                else
+                    return await response.json();
+            // .catch(error => console.error('Error loading HTML:', error, 'from URL:', url));   
+    }
+    
+    newView()
+    {
+        const tempDiv           = document.createElement('div');
+        const dimmedBackground  = document.createElement('div');
+        dimmedBackground.id     = "dimmed-background";
+        const panel             = document.createElement('div');
+        panel.id                = "panel";
+        const content           = document.createElement('div');
+        content.id              = "content";
+
+        panel.appendChild(content);
+        tempDiv.appendChild(dimmedBackground);
+        tempDiv.appendChild(panel);       
+        dimmedBackground.onclick = () => 
+        {
+            document.body.removeChild(dimmedBackground);
+            document.body.removeChild(panel);
+        };
+    
+        document.body.appendChild(dimmedBackground);
+        document.body.appendChild(panel);
+         
+        return content;
     }
 
-build(path)
-{
-    return  `${this.backendUrl}${path}`
-}
+
+build = (path) =>`${this.backendUrl}${path}`
+
 
 }
 
@@ -88,27 +84,28 @@ class Init  {
     }
 }
 
-
-
 const init = new Init();
 const provider = new ResourcesProvider();
 
 
 document.addEventListener('DOMContentLoaded', init.onLoad);
 
-function createUI(currentURL, type) {
+function createUI(currentURL, type) 
+{
 
     let container;
     let projectName;
 
-    if (type === PAGE_TYPE.visitor) {
+    if (type === PAGE_TYPE.visitor) 
+        {
         projectName = currentURL.split("/").pop();
         const headers = document.querySelectorAll("h4");
-        headers.forEach(header => {
-            if (header.textContent.trim() === "Description") {
-                container = header.closest('.project-desc-item');
-            }
-        });
+        headers.forEach(header =>{
+        if (header.textContent.trim() === "Description")
+        {
+            container = header.closest('.project-desc-item');
+        }
+    });
     }
     else
     {
@@ -119,12 +116,12 @@ function createUI(currentURL, type) {
         console.log("before",projectName)
         projectName = projectName.replace("42cursus-","")
         console.log("after",projectName)
-    if (container) {
+    if (container) 
+    {
 
         addButton(container, "Resources", `v1/en/resources/${projectName}.json`, fetchResourcesAndShowPanel);
         addButton(container, "Questions", `v1/en/questions/${projectName}.json`, fetchDataAndShowPanel);
-        addButton(container, "More", `v1/en/corrections/${projectName}.html`, fetchCorrectionAndShowPanel
-        )
+        addButton(container, "More", `v1/en/corrections/${projectName}.html`, fetchCorrectionAndShowPanel)
     }
     else{
         console.log("container obs container not found");
@@ -134,7 +131,8 @@ function createUI(currentURL, type) {
 
 
 
-function addButton(parent, text, url, onClick) {
+function addButton(parent, text, url, onClick) 
+{
     const button = document.createElement("button");
 
     button.innerText = text;
@@ -147,116 +145,129 @@ function addButton(parent, text, url, onClick) {
 }
 
 
-function fetchDataAndShowPanel(url) {
-    provider.get(url, provider.JSON, showPanel);
-}
-
-
-function fetchResourcesAndShowPanel(url) {
-    provider.get(url, provider.JSON, showResourcesPanel);
-}
-
-function  fetchCorrectionAndShowPanel(url)
+async function  fetchDataAndShowPanel(url) 
 {
-    provider.get(url, provider.TEXT, showCorrectionsPanel);
+    const  result  = await provider.get(url, provider.JSON);
+     showPanel(result)
+}
+
+
+async function fetchResourcesAndShowPanel(url) 
+{
+    const  result  = await provider.get(url, provider.JSON);
+    showResourcesPanel(result);
+}
+
+async function  fetchCorrectionAndShowPanel(url)
+{
+    const  result  = await provider.get(url, provider.TEXT, showCorrectionsPanel);
+    showCorrectionsPanel(result);
+
 }
 
 function showPanel(data)
-{ 
-    provider.loadHTML((tempDiv) => {
-        show(tempDiv, data, jsonToQuestionsHtml);
-    });
-}
-
-function show(root, data, callback)
 {
-    const dimmedBackground   =  root.querySelector('#dimmed-background');
-    const panel              =  root.querySelector('#panel');
-    const contentElement     =  panel.querySelector('#content');
-
-    dimmedBackground.onclick = () => {
-        document.body.removeChild(dimmedBackground);
-        document.body.removeChild(panel);
-    };
-
-    document.body.appendChild(dimmedBackground);
-    document.body.appendChild(panel);
-
-    contentElement.innerHTML = callback(data)
-
-
+    const view      = provider.newView();
+    const result    = jsonToQuestionsHtml(data);
+     result.forEach(child=>view.appendChild(child))
 }
 
 function showResourcesPanel(data)
 {
-    provider.loadHTML((tempDiv) => {
-        show(tempDiv, data, jsonToResourcesHtml);
-    });
+    const view = provider.newView();
+    const result   = jsonToResourcesHtml(data);
+    result.forEach(child=>view.appendChild(child))
 }
 
 function showCorrectionsPanel(data)
 {
-    provider.loadHTML((tempDiv) => {
-        show(tempDiv, data, (data)=>{
+    const view = provider.newView();
+    view.innerHTML = data;
+}
 
-            return data;
+function jsonToResourcesHtml(data) {
+    let elements = [];
+
+    if (Object.keys(data).length === 0) {
+        const messageElement = document.createElement('p');
+        messageElement.classList.add('resource-container');
+        messageElement.textContent = "No Resources Here";
+        elements.push(messageElement);
+    }
+
+    for (let key in data) {
+        if (key === "projectName") continue;
+
+        const divider = document.createElement('div');
+        divider.classList.add('title-divider');
+        divider.textContent = key;
+        elements.push(divider);
+
+        data[key].forEach(item => {
+            const resourceContainer = document.createElement('div');
+            resourceContainer.classList.add('resource-container');
+
+            const icon = document.createElement('img');
+            icon.classList.add('icon');
+            icon.alt = '';
+            icon.src = provider.build("images/" + item.icon + '.svg');
+            resourceContainer.appendChild(icon);
+
+            const link = document.createElement('a');
+            link.href = item.url;
+            link.target = "_blank";
+            link.classList.add('link');
+            link.textContent = item.title;
+            resourceContainer.appendChild(link);
+
+            elements.push(resourceContainer);
         });
-    });
-}
-
-function jsonToResourcesHtml(data)
-{
-    let html = '';
-
-    if (Object.keys(data).length === 0)
-    {
-        html = `<p class="resource-container">No Resources Here<p><br>`;
     }
-
-    for (let key in data) 
-    {
-        if(key === "projectName") // this projectName because it's a string
-            continue;
-
-        html += ` <div class="title-divider">${key}</div>`
-        for (let item of data[key]) {
-
-            html += `<div class="resource-container">
-                 <img  class="icon" alt="" src="${provider.build("images/" + item.icon + '.svg')}">
-                <a href="${item.url}" target="_blank" style="color:#fff" class='link'>${item.title}</a>
-                 </div>`
-        }
-
-    }
-    return html;
+    return elements;
 }
-
 
 function jsonToQuestionsHtml(data) {
-    
-    let message = 'this question generated with AI,you can contribute to add more questions'
-    
-    if (Object.keys(data).length === 0)
-    {
+    let elements = [];
+
+    let message = 'This question generated with AI, you can contribute to add more questions';
+    if (Object.keys(data).length === 0) {
         message = "No Questions Here";
     }
 
-    let html = `<p class="resource-container">${message}<p><br>`;
+    const messageElement = document.createElement('p');
+    messageElement.classList.add('resource-container');
+    messageElement.textContent = message;
+    elements.push(messageElement);
 
-    for (let key  in data) 
-        {
-        html += ` <div class="title-divider">${key}</div>`
+    for (let key in data) {
+        const divider = document.createElement('div');
+        divider.classList.add('title-divider');
+        divider.textContent = key;
+        elements.push(divider);
+
         let index = 1;
-        for (let item of data[key])
-        {
+        data[key].forEach(item => {
+            const questionContainer = document.createElement('div');
+            questionContainer.classList.add('resource-container');
 
-            html += `<div class="resource-container">
-                <p class="icon" >${index}<p>
-                <p>${item}</p>
-                </div>`
+            const indexElement = document.createElement('p');
+            indexElement.classList.add('icon');
+            indexElement.textContent = index;
+            questionContainer.appendChild(indexElement);
+
+            const questionElement = document.createElement('p');
+            questionElement.textContent = item;
+            questionContainer.appendChild(questionElement);
+
+            elements.push(questionContainer);
+
             index += 1;
-        }
-
+        });
     }
-    return html;
+    return elements;
 }
+
+
+
+
+

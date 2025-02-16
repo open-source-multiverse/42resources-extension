@@ -33,6 +33,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 20px var(--shadow-color);
     z-index: 9999;
+    background-color: #11141e;
 }
 
 #panel::-webkit-scrollbar {
@@ -40,11 +41,12 @@
 }
 
 #panel::-webkit-scrollbar-track {
-    background: var(--background-color);
+    background-color: #1e111e;
 }
 
 #panel::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
+    /* background-color: var(--primary-color); */
+    background-color: #59c7fe;
     border-radius: 4px;
 }
 
@@ -59,6 +61,7 @@
 #content {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
+  
 }
 
 .icon
@@ -76,8 +79,9 @@ justify-content: start;
 justify-items: center;
 align-items: center;
 margin: 5px 5px;
-background-color: #307759;
-color: #fff !important;
+/* background-color: #307759; */
+/* background-color: #cb9bff; */
+color:  #59c7fe !important;
 font-weight: 700;
 border-radius: 5px;
 }
@@ -85,37 +89,19 @@ border-radius: 5px;
 .link 
 {
 text-decoration: none;
-color: #fff !important;
+color: #59c7fe !important;
 
 }
 
 .title-divider
 {
-text-align: center;
+    width: 100%;
+    /* background-color: red; */
+    text-align: center;
+    font-size: 2rem;
+    border-bottom: #59c7fe dotted 1px;
+    color: #fb64b6;
 
---b: 6px;   /* control the border thickness */
---w: 80px;  /* control the width of the line*/
---g: 15px;  /* control the gap */
-
-/* --theme-color-light: #00ecef; */
---c: #295F6B;
-
-width: fit-content;
-padding: 0 1em;
-line-height: 1.6em;
-color: #fff;
-background: 
-conic-gradient(from   45deg at left ,var(--c) 25%,#0000 0) 0,
-conic-gradient(from -135deg at right,var(--c) 25%,#0000 0) 100%;
-background-size: 51% 100%;
-background-repeat: no-repeat;
-border-image: 
- linear-gradient(
-   #0000      calc(50% - var(--b)/2),
-   var(--c) 0 calc(50% + var(--b)/2),
-   #0000    0) 
-1/0 var(--w)/calc(var(--w) + var(--g));
-margin-inline: auto;
 
 }
 
@@ -129,5 +115,5 @@ margin-inline: auto;
 
 .link
 {
-    color: #fff !important;
+    color: #59c7fe !important;
 }
