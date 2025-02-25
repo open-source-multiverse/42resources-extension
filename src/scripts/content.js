@@ -1,32 +1,49 @@
 
 const PAGE_TYPE = { mine: 0, visitor: 1 }
 /*
- this class is Provider all Resources from backend 
+
+this class is Provider all Resources from backend 
  */
+
 class ResourcesProvider{
-    cache = {}         
+    cache = {}
+    what_next = "/what-next";
+        
     constructor()
     {
         this.backendUrl = 'https://cdn-42resources.netlify.app/';
         this.TEXT = "json"
         this.JSON = "text"
+        this.cache[this.what_next] = {
+            "What Next": [
+                "We need to improve the projects question.",
+                "Please share any resources with us 📚.",
+                "We need to add a backend to simplify sending resources or questions 💻.",
+                "We need to share this extension 🔗.",
+                "Add other project resources and questions (42 Advanced) 🛠️.",
+                "Thanks for your effort. :( 🙏"
+            ]
+        }
+        
     }
 
    async get(path, type)
     {
         // check if [path] is  in cache
+        console.log(this.cache)
         if(this.cache[path]) return this.cache[path];
 
         const url = `${this.backendUrl}${path}`
         const response = await  fetch(url);
           
-                if (!response.ok) return  type === this.JSON ? {} :  "Not Found ❌";
-
-                if (type === this.TEXT)
-                    return await response.text();
-                else
-                    return await response.json();
-            // .catch(error => console.error('Error loading HTML:', error, 'from URL:', url));   
+        if (!response.ok) return  type === this.JSON ? {} :  "Not Found ❌";
+        let result= null;
+        if (type === this.TEXT)
+            result  = await response.text();
+        else
+             result = await response.json();
+        this.cache[path] = result;
+        return result;
     }
     
     newView()
@@ -121,7 +138,7 @@ function createUI(currentURL, type)
 
         addButton(container, "Resources", `v1/en/resources/${projectName}.json`, fetchResourcesAndShowPanel);
         addButton(container, "Questions", `v1/en/questions/${projectName}.json`, fetchDataAndShowPanel);
-        addButton(container, "More", `v1/en/corrections/${projectName}.html`, fetchCorrectionAndShowPanel)
+        addButton(container, "What next ?🤔", `/what-next`, fetchDataAndShowPanel)
     }
     else{
         console.log("container obs container not found");
@@ -158,12 +175,7 @@ async function fetchResourcesAndShowPanel(url)
     showResourcesPanel(result);
 }
 
-async function  fetchCorrectionAndShowPanel(url)
-{
-    const  result  = await provider.get(url, provider.TEXT, showCorrectionsPanel);
-    showCorrectionsPanel(result);
 
-}
 
 function showPanel(data)
 {
@@ -179,11 +191,7 @@ function showResourcesPanel(data)
     result.forEach(child=>view.appendChild(child))
 }
 
-function showCorrectionsPanel(data)
-{
-    const view = provider.newView();
-    view.innerHTML = data;
-}
+
 
 function jsonToResourcesHtml(data) {
     let elements = [];
@@ -226,18 +234,14 @@ function jsonToResourcesHtml(data) {
     return elements;
 }
 
-function jsonToQuestionsHtml(data) {
+function jsonToQuestionsHtml(data)
+{
     let elements = [];
 
-    let message = 'This question generated with AI, you can contribute to add more questions';
     if (Object.keys(data).length === 0) {
         message = "No Questions Here";
     }
 
-    const messageElement = document.createElement('p');
-    messageElement.classList.add('resource-container');
-    messageElement.textContent = message;
-    elements.push(messageElement);
 
     for (let key in data) {
         const divider = document.createElement('div');
@@ -266,8 +270,3 @@ function jsonToQuestionsHtml(data) {
     }
     return elements;
 }
-
-
-
-
-

@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "42Resources",
-    "description": "2resources is a simple extension provide resources for project like [blogs, videos, testers]",
-    "version": "1.0",
+    "description": "42Resources is a browser extension designed to assist 42 students with quick access to helpful resources for projects, like blogs, videos, and testing materials",
+    "version": "2.0",
     "browser_specific_settings": {
         "gecko": {
             "id": "{ddf4e0df-7e58-48d1-9658-31bbb2e4d981}"
