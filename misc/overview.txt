@@ -1,0 +1,9 @@
+42Resources:
+
+📖 Overview:
+42Resources is a browser extension designed to assist 42 students with quick access to helpful resources for projects, like blogs, videos, and testing materials.
+
+✨ Key Features:
+
+⚡ Quick Access to Resources: Find curated docs, tutorials, and tips to help with your 42 projects.
+🎯 Prepare for Evaluations: Browse commonly asked questions and potential answers to ace your evaluations!

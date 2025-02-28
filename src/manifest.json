@@ -5,7 +5,8 @@
     "version": "2.0",
     "browser_specific_settings": {
         "gecko": {
-            "id": "{ddf4e0df-7e58-48d1-9658-31bbb2e4d981}"
+            "id": "{60545fa9-c95b-4c36-9c41-62e8497ceda3}",
+            "update_url": "https://cdn-42resources.netlify.app/firefox/updates.json"
         }
     },
     "action": {
